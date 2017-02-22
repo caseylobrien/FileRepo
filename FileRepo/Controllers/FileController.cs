@@ -14,24 +14,32 @@ namespace FileRepo.Controllers
     public class FileController : ApiController
     {
         private const string _root = "C:\\FileApiContent\\";
-        public HttpResponseMessage Download(string fileName)
+        // /api/file/download/2016holidays.pdf
+        [HttpGet]
+        public HttpResponseMessage Download(string filename)
         {
             StringBuilder sb = new StringBuilder(_root);
-            sb.Append(fileName);
+            sb.Append(filename);
             if (!File.Exists(sb.ToString()))
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
 
             FileStream fileStream = new FileStream(sb.ToString(), FileMode.Open, FileAccess.Read);
-            string contentType = MimeMapping.GetMimeMapping(fileName);
+            string contentType = MimeMapping.GetMimeMapping(filename);
 
 
             HttpResponseMessage response = new HttpResponseMessage();
             response.Content = new StreamContent(fileStream);
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            response.Content.Headers.ContentDisposition.FileName = fileName;
+            response.Content.Headers.ContentDisposition.FileName = filename;
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
             return response;
+        }
+
+        [HttpGet]
+        public string test(string filename)
+        {
+            return "<div>" + filename + "</div>";
         }
     }
 }

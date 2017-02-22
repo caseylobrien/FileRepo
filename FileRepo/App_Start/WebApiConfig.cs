@@ -20,6 +20,13 @@ namespace FileRepo
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+
+            config.Routes.MapHttpRoute(
+                name: "File Api",
+                routeTemplate: "api/{controller}/{action}/{filename}",
+                defaults: new { filename = RouteParameter.Optional }
+            );
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
